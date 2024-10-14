@@ -1,99 +1,42 @@
-#!/bin/bash
+import curses
+from proxy_menu import proxy_menu
+from vpn_menu import vpn_menu
+from settings_menu import settings_menu
 
-# Function to install necessary packages
-install_dependencies() {
-    echo "Installing necessary packages..."
-    if command -v apt-get &>/dev/null; then
-        sudo apt-get update
-        sudo apt-get install -y curl wget git
-    elif command -v yum &>/dev/null; then
-        sudo yum install -y curl wget git
-    fi
-}
+def main_menu(stdscr):
+    curses.curs_set(0)
+    stdscr.clear()
+    stdscr.refresh()
 
-# Function to set up a proxy server
-setup_proxy() {
-    echo "Choose Proxy Type:"
-    echo "1. HTTP Proxy (Tinyproxy)"
-    echo "2. SOCKS Proxy (3proxy)"
-    echo "3. Exit"
+    menu = ['Set up Proxy', 'Set up VPN', 'Settings', 'Exit']
+    current_row = 0
 
-    read -p "Enter your choice (1 or 2): " proxy_choice
+    while True:
+        stdscr.clear()
+        for idx, row in enumerate(menu):
+            if idx == current_row:
+                stdscr.attron(curses.color_pair(1))
+                stdscr.addstr(idx, 0, row)
+                stdscr.attroff(curses.color_pair(1))
+            else:
+                stdscr.addstr(idx, 0, row)
 
-    case $proxy_choice in
-        1)
-            echo "Setting up HTTP Proxy with Tinyproxy..."
-            sudo apt-get install -y tinyproxy
-            sudo sed -i 's/Allow 127.0.0.1/Allow ALL/' /etc/tinyproxy/tinyproxy.conf
-            sudo systemctl restart tinyproxy
-            echo "HTTP Proxy setup complete. Connect using your server's IP and port 8888."
-            ;;
-        2)
-            echo "Setting up SOCKS Proxy with 3proxy..."
-            sudo apt-get install -y 3proxy
-            echo "socks -p1080" > ~/3proxy.cfg
-            3proxy ~/3proxy.cfg
-            echo "SOCKS Proxy setup complete. Connect using your server's IP and port 1080."
-            ;;
-        3)
-            echo "exiting"
-            exit 1
-        *)
-            echo "Invalid choice."
-            ;;
-    esac
-}
+        key = stdscr.getch()
 
-# Function to set up a VPN
-setup_vpn() {
-    echo "Choose VPN Type:"
-    echo "1. OpenVPN"
-    echo "2. WireGuard"
+        if key == curses.KEY_UP and current_row > 0:
+            current_row -= 1
+        elif key == curses.KEY_DOWN and current_row < len(menu) - 1:
+            current_row += 1
+        elif key == curses.KEY_ENTER or key in [10, 13]:
+            if current_row == len(menu) - 1:
+                break
+            elif current_row == 0:
+                proxy_menu(stdscr)
+            elif current_row == 1:
+                vpn_menu(stdscr)
+            elif current_row == 2:
+                settings_menu(stdscr)
 
-    read -p "Enter your choice (1 or 2): " vpn_choice
+        stdscr.refresh()
 
-    case $vpn_choice in
-        1)
-            echo "Setting up OpenVPN..."
-            wget https://git.io/vpn -O openvpn-install.sh && bash openvpn-install.sh
-            echo "OpenVPN setup complete. Use the generated .ovpn file to connect."
-            ;;
-        2)
-            echo "Setting up WireGuard..."
-            sudo apt-get install -y wireguard
-            # Simplified WireGuard setup
-            echo "WireGuard setup complete. Follow additional instructions for configuration."
-            ;;
-        *)
-            echo "Invalid choice. Exiting."
-            exit 1
-            ;;
-    esac
-}
-
-# Main menu
-main_menu() {
-    echo "Welcome to the Proxy/VPN Setup Script"
-    echo "Please choose an option:"
-    echo "1. Set up a Proxy"
-    echo "2. Set up a VPN"
-
-    read -p "Enter your choice (1 or 2): " choice
-
-    case $choice in
-        1)
-            setup_proxy
-            ;;
-        2)
-            setup_vpn
-            ;;
-        *)
-            echo "Invalid choice. Exiting."
-            exit 1
-            ;;
-    esac
-}
-
-# Run the script
-install_dependencies
-main_menu
+curses.wrapper(main_menu)
