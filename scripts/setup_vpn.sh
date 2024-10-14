@@ -12,16 +12,19 @@ setup_wireguard() {
     sudo mkdir -p /etc/wireguard
     sudo chmod 600 /etc/wireguard
 
-    server_private_key=$(wg genkey)# Generate server private and public keys
+    # Generate server private and public keys
+    server_private_key=$(wg genkey)
     server_public_key=$(echo $server_private_key | wg pubkey)
 
-    cat <<EOF | sudo tee /etc/wireguard/wg0.conf 
+    # Create WireGuard config
+    cat <<EOF | sudo tee /etc/wireguard/wg0.conf
 [Interface]
 PrivateKey = $server_private_key
 Address = 10.0.0.1/24
 ListenPort = 51820
 SaveConfig = true
 
+# Enable IP forwarding
 PostUp = sysctl -w net.ipv4.ip_forward=1
 PostDown = sysctl -w net.ipv4.ip_forward=0
 
