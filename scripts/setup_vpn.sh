@@ -12,11 +12,10 @@ setup_wireguard() {
     sudo mkdir -p /etc/wireguard
     sudo chmod 600 /etc/wireguard
 
-    # Generate server private and public keys
-    server_private_key=$(wg genkey)
+    
+    server_private_key=$(wg genkey) # Generate server private and public keys
     server_public_key=$(echo $server_private_key | wg pubkey)
 
-    # Create WireGuard config
     cat <<EOF | sudo tee /etc/wireguard/wg0.conf
 [Interface]
 PrivateKey = $server_private_key
