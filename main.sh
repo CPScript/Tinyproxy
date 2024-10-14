@@ -1,28 +1,40 @@
 #!/bin/bash
-matrix_animation() {
+
+animation() {
     clear
     echo -e "\e[32m"  
-    for i in {1..100}; do
+
+    
+    for _ in {1..20}; do
         line=""
-        for j in {1..80}; do
+        for _ in {1..20}; do
             line+=$(printf "\\$(printf '%03o' $((RANDOM%57+33)))")
         done
         echo "$line"
-        sleep 0.05  
+        sleep 0.01
     done
+
+    
+    for _ in {1..4}; do
+        tput cuu1  
+        tput el    
+        sleep 0.01
+    done
+
     echo -e "\e[0m"  
 }
 
-display_welcome_and_countdown() {
+message() {
     clear
-    echo "Welcome to the Network Client!"
-    echo "Booting up client in 5 seconds..."
-    for i in {5..1}; do
-        echo "$i..."
-        sleep 1
-    done
+    echo "Welcome to the Client!"
+    sleep 2
+    clear
 }
 
-matrix_animation
-display_welcome_and_countdown
-python3 src/main.py
+echo "This doesn't do anything, its just a animation!"
+sleep 1
+clear
+animation
+message
+
+python3 src/menu.py
