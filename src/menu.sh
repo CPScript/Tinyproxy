@@ -16,6 +16,7 @@ setup_proxy() {
     echo "Choose Proxy Type:"
     echo "1. HTTP Proxy (Tinyproxy)"
     echo "2. SOCKS Proxy (3proxy)"
+    echo "3. Exit"
 
     read -p "Enter your choice (1 or 2): " proxy_choice
 
@@ -34,9 +35,11 @@ setup_proxy() {
             3proxy ~/3proxy.cfg
             echo "SOCKS Proxy setup complete. Connect using your server's IP and port 1080."
             ;;
-        *)
-            echo "Invalid choice. Exiting."
+        3)
+            echo "exiting"
             exit 1
+        *)
+            echo "Invalid choice."
             ;;
     esac
 }
