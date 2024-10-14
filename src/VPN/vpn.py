@@ -21,4 +21,6 @@ def vpn_menu(stdscr):
         output, error = process.communicate()
         stdscr.addstr(4, 0, "WireGuard setup complete.")
     else:
-        stdscr.addstr(4, 0,
+        stdscr.addstr(4, 0, "Invalid VPN type. Please try again.")
+        stdscr.refresh()
+        stdscr.getch()
