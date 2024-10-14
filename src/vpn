@@ -1,0 +1,25 @@
+setup_vpn() {
+    echo "Choose VPN Type:"
+    echo "1. OpenVPN"
+    echo "2. WireGuard"
+    
+    read -p "Enter your choice (1 or 2): " vpn_choice
+
+    case $vpn_choice in
+        1)
+            echo "Setting up OpenVPN..."
+            # Install and configure OpenVPN
+            ;;
+        2)
+            echo "Setting up WireGuard..."
+            # Install and configure WireGuard
+            ;;
+        *)
+            echo "Invalid choice"
+            exit 1
+            ;;
+    esac
+
+    # Provide connection details to the user
+    echo "VPN setup complete. Use the provided configuration file to connect."
+}
