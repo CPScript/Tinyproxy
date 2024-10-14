@@ -9,22 +9,17 @@ def proxy_menu(stdscr):
     stdscr.refresh()
     stdscr.getch()
 
-    # setup
     proxy_type = input("Enter proxy type (http/socks): ")
     if proxy_type == "http":
-        stdscr.addstr(4, 0, "Setting up HTTP Proxy...")
-        stdscr.refresh()
         bashCommand = "bash scripts/setup_proxy.sh http"
         process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
         output, error = process.communicate()
-        stdscr.addstr(5, 0, "HTTP Proxy setup complete.")
+        stdscr.addstr(4, 0, "HTTP Proxy setup complete.")
     elif proxy_type == "socks":
-        stdscr.addstr(4, 0, "Setting up SOCKS Proxy...")
-        stdscr.refresh()
         bashCommand = "bash scripts/setup_proxy.sh socks"
         process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
         output, error = process.communicate()
-        stdscr.addstr(5, 0, "SOCKS Proxy setup complete.")
+        stdscr.addstr(4, 0, "SOCKS Proxy setup complete.")
     else:
         stdscr.addstr(4, 0, "Invalid proxy type. Please try again.")
         stdscr.refresh()
