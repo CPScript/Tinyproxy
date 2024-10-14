@@ -9,20 +9,17 @@ def settings_menu(stdscr):
     stdscr.refresh()
     stdscr.getch()
 
-    # setting logic
     setting = input("Enter setting to configure (logging/firewall): ")
     if setting == "logging":
-        stdscr.addstr(4, 0, "Configuring logging...")
-        stdscr.refresh()
-        # logging logic
-        stdscr.addstr(5, 0, "Logging configured.")
+        bashCommand = "bash scripts/configure_logging.sh"
+        process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+        output, error = process.communicate()
+        stdscr.addstr(4, 0, "Logging configured.")
     elif setting == "firewall":
-        stdscr.addstr(4, 0, "Configuring firewall rules...")
-        stdscr.refresh()
         bashCommand = "bash scripts/configure_firewall.sh"
         process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
         output, error = process.communicate()
-        stdscr.addstr(5,  0, "Firewall rules configured.")
+        stdscr.addstr(4, 0, "Firewall rules configured.")
     else:
         stdscr.addstr(4, 0, "Invalid setting. Please try again.")
         stdscr.refresh()
