@@ -1,7 +1,7 @@
 import curses
 from PROXY.proxy import proxy_menu
 from VPN.vpn import vpn_menu
-from SET.confg import settings_menu
+from SET.set import settings_menu
 
 def main_menu(stdscr):
     curses.curs_set(0)
