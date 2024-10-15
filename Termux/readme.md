@@ -1,6 +1,6 @@
 ### setup
 
-* 1. `chmod +x setup.sh`
+* 1. `chmod +x setup.sh proxy_manager.py ui.py proxy_server.py`
 * 2. `./setup.sh`
 * 3. `python proxy_manager.py`
 * 4. **Exiting the Application**: To exit the application, press the q key as indicated in the user interface.
