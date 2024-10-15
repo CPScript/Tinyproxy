@@ -1,12 +1,14 @@
 import subprocess
 import os
 import time
+from datetime import datetime
 
 class ProxyServer:
     def __init__(self):
         self.is_running = False
         self.start_time = None
         self.tinyproxy_pid = None
+        self.connected_devices = {} 
 
     def get_public_ip(self):
         return subprocess.getoutput("curl -s https://ipinfo.io/ip")
@@ -18,8 +20,8 @@ class ProxyServer:
         if not self.is_running:
             self.is_running = True
             self.start_time = time.time()
-            self.tinyproxy_pid = subprocess.Popen(["tinyproxy"])
-    
+            self.tinyproxy_pid = subprocess.Popen(["/data/data/com.termux/files/usr/bin/tinyproxy"])
+
     def stop_tinyproxy(self):
         if self.tinyproxy_pid:
             os.kill(self.tinyproxy_pid.pid, 15)
@@ -35,3 +37,10 @@ class ProxyServer:
 
     def connection_status(self):
         return "Running" if self.is_running else "Stopped"
+
+    def add_connected_device(self, ip_address):
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.connected_devices[ip_address] = timestamp
+
+    def get_connected_devices(self):
+        return self.connected_devices
