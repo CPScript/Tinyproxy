@@ -46,7 +46,7 @@ fi
 echo "Allowing local connections"
 sed -i '/^Allow /d' "$CONFIG_PATH"
 echo "Allow 127.0.0.1" >> "$CONFIG_PATH"
-echo "Allow 192.168.0.0/16" >> "$CONFIG_PATH" 
+echo "Allow 192.168.0.0/16" >> "$CONFIG_PATH"  
 
 echo "Setting the port for Tinyproxy"
 sed -i 's/^Port .*/Port 8888/' "$CONFIG_PATH"
@@ -55,10 +55,17 @@ echo "Enabling logging"
 sed -i 's/^#LogFile "\/var\/log\/tinyproxy.log"/LogFile "\/data\/data\/com.termux\/files\/usr\/var\/log\/tinyproxy.log"/' "$CONFIG_PATH"
 sed -i 's/^#MaxClients 100/MaxClients 100/' "$CONFIG_PATH"
 
-echo "Log file doesn't exist, creating it!"
 LOG_DIR="/data/data/com.termux/files/usr/var/log/"
 mkdir -p "$LOG_DIR"
 touch "${LOG_DIR}/tinyproxy.log"
+
+if ! grep -q "^Bind" "$CONFIG_PATH"; then
+    echo "Adding Bind address to configuration..."
+    echo "Bind 0.0.0.0" >> "$CONFIG_PATH"  
+fi
+
+echo "Starting Tinyproxy..."
+tinyproxy -d
 
 echo "Tinyproxy configuration is complete."
 echo "Setup completed. You can now run the proxy manager."
