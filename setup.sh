@@ -30,6 +30,7 @@ fi
 echo "Configuring Tinyproxy"
 CONFIG_PATH="/data/data/com.termux/files/usr/etc/tinyproxy/tinyproxy.conf"
 
+# Check if the configuration file exists
 if [ ! -f "$CONFIG_PATH" ]; then
     echo "Configuration file not found. Creating a default configuration..."
     cp /data/data/com.termux/files/usr/etc/tinyproxy/tinyproxy.conf.default "$CONFIG_PATH"
